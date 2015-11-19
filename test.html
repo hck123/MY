@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	  <div><audio id="mp3" src="fcwr_ljy.mp4" controls></audio></div> 
+	  <div>
+	  	 <video id="mp4" src="fcwr_ljy.mp4" width="400" height="400"></video> 
+	  	 <progress id="pro" max="100"  min="0" value="0"></progress>
+	 	 <button id="play">播放</button>
+	 	 <button id="stop">停止</button>
+	   	 <button id="all">全屏</button>
+	  </div>
+	  <script type="text/javascript">
+	 
+	  	window.onload = function(){
+	  		var w = document.documentElement.clientWidth;
+	  		var h = document.documentElement.clientHeight;
+	  		var mp3 = document.querySelector("#mp3");
+	  		var mp4 = document.querySelector("#mp4");
+	  		var play = document.querySelector("#play");
+	  		var stop = document.querySelector("#stop");
+	  		var all = document.querySelector("#all");
+	  		var pro = document.querySelector("#pro");
+	  		 var played = false;
+	  		play.onclick = function(){
+	  			pro.max = mp4.duration;
+	  			console.log("总长:",mp4.duration);
+	  			if(played ==  false){
+	  				this.textContent = "暂停";
+	  				mp4.play();
+	  			}else{
+	  				this.textContent = "播放";
+	  				mp4.pause();
+	  			}
+	  			
+	  			played = !played;
+	  		}
+	  		/*pro.onclick = function(e){ 
+	  		 	 var b = e.offsetX/pro.clientWidth;
+	  		 	pro.value = b*mp4.duration;
+	  		  	mp4.currentTime = b*mp4.duration;
+	  		  	if(mp4.currentTime != mp4.duration){
+	  		  		mp4.play();
+	  		  	}
+	  		 }
+*/
+	  		 pro.onmousedown = function(e){
+	  		 	var b = e.offsetX/pro.clientWidth;
+	  		 	pro.value = b*mp4.duration;
+	  		  	mp4.currentTime = b*mp4.duration;
+	  		  	pro.onmousemove = move;
+	  		  	pro.onmouseout = out;
+	  		  	return false;
+	  		 }
+	  		 function move(e){
+	  		 	var b = e.offsetX/pro.clientWidth;
+	  		 	pro.value = b*mp4.duration;
+	  		  	mp4.currentTime = b*mp4.duration;
+	  		   	
+	  		 }
+	  		 pro.onmouseup = function(){
+	  		 	pro.onmousemove = null;
+	  		 }
+	  		 function out(){
+	  		 	pro.onmousemove = null;
+	  		 	pro.onmouseout = null;
+	  		 }
+	  		mp4.ontimeupdate = function(){
+	  			console.log("当前时间:",mp4.currentTime);
+	  			pro.value = mp4.currentTime;
+	  		}
+
+
+	  		stop.onclick = function(){
+	  			mp4.pause();
+	  			mp4.currentTime = 0;
+	  		}
+	  		all.onclick = function(){
+	  			if(played == false){
+	  				all.textContent = "退出";
+	  				mp4.width = w;
+	  				mp4.height = h;
+	  			}else{
+	  				all.textContent = "全屏";
+	  				mp4.width = 400;
+	  				mp4.height = 400;
+	  			}
+	  			
+	  			played = !played;
+	  		}
+	  		
+	  	}
+	  </script>
+</body>
+</html>
